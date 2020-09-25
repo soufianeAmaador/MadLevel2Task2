@@ -8,5 +8,9 @@ data class Quiz (var question: String){
             "A Unit in Kotlin corresponds to a void in Java.",
             "In Kotlin 'when' replaces the 'switch' operator in Java."
             )
+
+        val ANSWERS = arrayOf(
+            0,0,1,1
+        )
     }
 }

@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.madlevel2task2.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.quiz_label.*
+import kotlinx.android.synthetic.main.quiz_label.view.*
 
 class MainActivity : AppCompatActivity() {
     private val questions = arrayListOf<Quiz>()
@@ -58,24 +60,26 @@ class MainActivity : AppCompatActivity() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-                println("ONSWIPE CALLED " + position)
+
+                val question = viewHolder.itemView.tvQuestions.text.toString()
+                val answer = Quiz.ANSWERS[questions.indexOf(Quiz(question))]
+
                 if (direction == ItemTouchHelper.RIGHT){
-                    if (position == 1){
-                        println("deleting the right answer ")
+                    if (answer == 1){
                         questions.removeAt(position)
                         quizAdapter.notifyDataSetChanged()
-                    }else if (position != 1){
+                    }else if (answer == 0){
                         Snackbar.make(rvQuiz,"Thats not the right answer",Snackbar.LENGTH_SHORT).show()
                         quizAdapter.notifyDataSetChanged()
 
                     }
 
                 }else if (direction == ItemTouchHelper.LEFT){
-                        if (position == 1){
+                        if (answer == 1){
                         Snackbar.make(rvQuiz,"Thats not the right answer",Snackbar.LENGTH_SHORT).show()
                             quizAdapter.notifyDataSetChanged()
 
-                        }else if(position != 1){
+                        }else if(answer != 1){
                             questions.removeAt(position)
                             quizAdapter.notifyDataSetChanged()
                         }
