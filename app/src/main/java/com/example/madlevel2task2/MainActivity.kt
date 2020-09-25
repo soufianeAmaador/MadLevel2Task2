@@ -26,30 +26,33 @@ class MainActivity : AppCompatActivity() {
         initViews()
     }
 
-    private fun initViews(){
+    private fun initViews() {
         binding.rvQuiz.layoutManager = LinearLayoutManager(
             this@MainActivity,
             RecyclerView.VERTICAL, false
         )
         binding.rvQuiz.adapter = quizAdapter
 
-        for (i in Quiz.QUESTIONS.indices){
-            questions.add(Quiz(Quiz.QUESTIONS[i]))
-        }
+        questions.add(Quiz("A 'val' and 'var' are the same.", 0))
+        questions.add(Quiz("Mobile Application Development grants 12 ECTS.", 0))
+        questions.add(Quiz("A Unit in Kotlin corresponds to a void in Java.", 1))
+        questions.add(Quiz("In Kotlin 'when' replaces the 'switch' operator in Java.", 1))
 
         binding.rvQuiz.addItemDecoration(
-            DividerItemDecoration(this@MainActivity,
-            DividerItemDecoration.VERTICAL)
+            DividerItemDecoration(
+                this@MainActivity,
+                DividerItemDecoration.VERTICAL
+            )
         )
 
         createItemTouchHelper().attachToRecyclerView(rvQuiz)
     }
 
-    private fun createItemTouchHelper() : ItemTouchHelper {
+    private fun createItemTouchHelper(): ItemTouchHelper {
         val callBack = object : ItemTouchHelper.SimpleCallback(
             0,
             ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-        ){
+        ) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
@@ -61,29 +64,34 @@ class MainActivity : AppCompatActivity() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
 
-                val question = viewHolder.itemView.tvQuestions.text.toString()
-                val answer = Quiz.ANSWERS[questions.indexOf(Quiz(question))]
+                if (direction == ItemTouchHelper.RIGHT) {
+                    if (questions[position].answers == 1) {
 
-                if (direction == ItemTouchHelper.RIGHT){
-                    if (answer == 1){
                         questions.removeAt(position)
                         quizAdapter.notifyDataSetChanged()
-                    }else if (answer == 0){
-                        Snackbar.make(rvQuiz,"Thats not the right answer",Snackbar.LENGTH_SHORT).show()
+
+                    } else if (questions[position].answers == 0) {
+
+                        Snackbar.make(rvQuiz, "Thats not the right answer", Snackbar.LENGTH_SHORT)
+                            .show()
                         quizAdapter.notifyDataSetChanged()
 
                     }
 
-                }else if (direction == ItemTouchHelper.LEFT){
-                        if (answer == 1){
-                        Snackbar.make(rvQuiz,"Thats not the right answer",Snackbar.LENGTH_SHORT).show()
-                            quizAdapter.notifyDataSetChanged()
+                } else if (direction == ItemTouchHelper.LEFT) {
 
-                        }else if(answer != 1){
-                            questions.removeAt(position)
-                            quizAdapter.notifyDataSetChanged()
-                        }
+                    if (questions[position].answers == 1) {
+
+                        Snackbar.make(rvQuiz, "Thats not the right answer", Snackbar.LENGTH_SHORT)
+                            .show()
+                        quizAdapter.notifyDataSetChanged()
+
+                    } else if (questions[position].answers == 0) {
+
+                        questions.removeAt(position)
+                        quizAdapter.notifyDataSetChanged()
                     }
+                }
 
 
             }
