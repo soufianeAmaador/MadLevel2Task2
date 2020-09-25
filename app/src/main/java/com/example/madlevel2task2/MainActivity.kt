@@ -68,13 +68,11 @@ class MainActivity : AppCompatActivity() {
                     if (questions[position].answers == 1) {
 
                         questions.removeAt(position)
-                        quizAdapter.notifyDataSetChanged()
 
                     } else if (questions[position].answers == 0) {
 
                         Snackbar.make(rvQuiz, "Thats not the right answer", Snackbar.LENGTH_SHORT)
                             .show()
-                        quizAdapter.notifyDataSetChanged()
 
                     }
 
@@ -89,10 +87,10 @@ class MainActivity : AppCompatActivity() {
                     } else if (questions[position].answers == 0) {
 
                         questions.removeAt(position)
-                        quizAdapter.notifyDataSetChanged()
                     }
                 }
 
+                quizAdapter.notifyDataSetChanged()
 
             }
         }
